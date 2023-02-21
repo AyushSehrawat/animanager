@@ -34,7 +34,7 @@ export const query_getuserdata = gql`
   }
 `
 
-export const query_getuseranimedata = gql`
+export const query_getuseranime = gql`
   query ($id: Int) {
     MediaListCollection(userId: $id, type: ANIME , sort: UPDATED_TIME_DESC) {
       lists {
@@ -42,6 +42,7 @@ export const query_getuseranimedata = gql`
           id
           status
           progress
+          score
           media {
             id
             title {
@@ -55,7 +56,7 @@ export const query_getuseranimedata = gql`
   }
 `
 
-export const query_getusermangadata = gql`
+export const query_getusermanga = gql`
   query ($id: Int) {
     MediaListCollection(userId: $id, type: MANGA , sort: UPDATED_TIME_DESC) {
       lists {
@@ -63,6 +64,8 @@ export const query_getusermangadata = gql`
           id
           status
           progress
+          progressVolumes
+          score
           media {
             id
             title {

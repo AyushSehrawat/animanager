@@ -6,7 +6,7 @@ import { env } from '$lib/env'
 const base_uri = 'https://graphql.anilist.co'
 
 /** @type {import('./$types').PageServerLoad} */
-export const load = async ({ url, cookies }) => {
+export const load = async ({ cookies }) => {
   const access_token = cookies.get('access_token') ?? 'anonymous'
   if (access_token !== 'anonymous' && access_token !== '') {
 
@@ -36,4 +36,13 @@ export const load = async ({ url, cookies }) => {
     "success": false,
     "message": "You are not logged in, please login."
   }
+}
+
+export const actions = {
+  anime: async ({ request, fetch, cookies }) => {
+    // do stuff here
+  },
+  manga: async ({ request, fetch, cookies }) => {
+
+  },
 }
