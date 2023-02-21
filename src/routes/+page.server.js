@@ -21,14 +21,15 @@ export const load = async ({ url, cookies }) => {
     const getUserData = async () => {
       const data_uid = await graphQLClient.request(queries.query_getuserid)
       const uid = data_uid['Viewer']['id']
-      const data_user = await graphQLClient.request(queries.query_getuserdata, {id : uid})
-      return JSON.stringify(data_user)
+      const data_user = await graphQLClient.request(queries.query_getuserdata, { id: uid })
+      console.log(JSON.stringify(data_user))
+      return data_user
     }
 
     return {
       "success": true,
-      "message" : "Logged in",
-      data_user : getUserData()
+      "message": "Logged in",
+      user_data: getUserData()
     }
   };
   return {

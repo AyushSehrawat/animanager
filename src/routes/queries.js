@@ -8,7 +8,7 @@ export const query_getuserid = gql`
   }
 `
 
-export const query_getuserdata =  gql`
+export const query_getuserdata = gql`
   query ($id: Int) {
     User(id: $id) {
       id
@@ -16,9 +16,19 @@ export const query_getuserdata =  gql`
       about
       avatar {
         large
-        medium
       }
-      bannerImage
+      statistics {
+        anime {
+          count
+          minutesWatched
+          episodesWatched      
+        }
+        manga {
+          count
+          chaptersRead
+          volumesRead
+        }
+      }
       
     }
   }
