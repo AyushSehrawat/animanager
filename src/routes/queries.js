@@ -15,7 +15,7 @@ export const query_getuserdata = gql`
       name
       about
       avatar {
-        large
+        medium
       }
       statistics {
         anime {
