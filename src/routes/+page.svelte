@@ -8,6 +8,7 @@
 		goto(`${uri}`);
 	}
 
+	// set current tab
 	let currentTab = 'anime';
 	function handleCurrentTab(ct) {
 		currentTab = ct;
