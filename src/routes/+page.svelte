@@ -1,18 +1,26 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 	export let data;
 
+	const uid = data.uid;
 	const udata = data.user_data;
 
 	function handleClick(uri) {
 		goto(`${uri}`);
 	}
 
-	// set current tab
 	let currentTab = 'anime';
 	function handleCurrentTab(ct) {
 		currentTab = ct;
 	}
+
+	let animeData = {};
+	onMount(async () => {
+		const response = await fetch(`/api/anime/${uid}`);
+		animeData = await response.json();
+		console.log(animeData);
+	});
 </script>
 
 <main class="font-op flex flex-col min-h-screen w-full p-3 md:p-9 bg-nord-0">
@@ -87,7 +95,10 @@
 				>
 			</form>
 			{#if currentTab === 'anime'}
-				hi
+				{#each animeData.MediaListCollection?.lists[0].entries as anime}
+					{anime?.media.title.romanji}
+					<br />
+				{/each}
 			{:else}
 				bye
 			{/if}

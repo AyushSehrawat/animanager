@@ -7,39 +7,43 @@ const base_uri = 'https://graphql.anilist.co';
 
 /** @type {import('./$types').PageServerLoad} */
 export const load = async ({ cookies }) => {
-  const access_token = cookies.get('access_token') ?? 'anonymous';
-  if (access_token !== 'anonymous') {
-    const graphQLClient = new GraphQLClient(base_uri, {
-      headers: {
-        Authorization: 'Bearer ' + access_token,
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      }
-    });
+	const access_token = cookies.get('access_token') ?? 'anonymous';
+	if (access_token !== 'anonymous') {
+		const graphQLClient = new GraphQLClient(base_uri, {
+			headers: {
+				Authorization: 'Bearer ' + access_token,
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			}
+		});
 
-    const getUserData = async () => {
-      const data_uid = await graphQLClient.request(queries.query_getuserid);
-      const uid = data_uid['Viewer']['id'];
-      const data_user = await graphQLClient.request(queries.query_getuserdata, { id: uid });
-      console.log(JSON.stringify(data_user));
-      return data_user;
-    };
+		const getUserId = async () => {
+			const data_uid = await graphQLClient.request(queries.query_getuserid);
+			const uid = data_uid['Viewer']['id'];
+			return uid;
+		};
 
-    return {
-      success: true,
-      message: 'Logged in',
-      user_data: getUserData()
-    };
-  }
-  return {
-    success: false,
-    message: 'You are not logged in, please login.'
-  };
+		const getUserData = async () => {
+			const uid = await getUserId();
+			const data_user = await graphQLClient.request(queries.query_getuserdata, { id: uid });
+			console.log(JSON.stringify(data_user));
+			return data_user;
+		};
+
+		return {
+			success: true,
+			message: 'Logged in',
+			user_data: getUserData(),
+			uid: getUserId()
+		};
+	}
+	return {
+		success: false,
+		message: 'You are not logged in, please login.'
+	};
 };
 
 export const actions = {
-  anime: async ({ request, fetch, cookies }) => {
-
-  },
-  manga: async ({ request, fetch, cookies }) => { }
+	anime: async ({ request, fetch, cookies }) => {},
+	manga: async ({ request, fetch, cookies }) => {}
 };
