@@ -26,7 +26,6 @@ export const load = async ({ cookies }) => {
 		const getUserData = async () => {
 			const uid = await getUserId();
 			const data_user = await graphQLClient.request(queries.query_getuserdata, { id: uid });
-			console.log(JSON.stringify(data_user));
 			return data_user;
 		};
 

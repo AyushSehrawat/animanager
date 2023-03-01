@@ -18,7 +18,6 @@ export const GET = async ({ cookies, params }) => {
 
 		const getAnimeList = async () => {
 			const animeList = await graphQLClient.request(queries.query_getuseranime, { id: params.uid });
-			console.log(JSON.stringify(animeList));
 			return animeList;
 		};
 		const data = await getAnimeList();

@@ -1,6 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { each } from 'svelte/internal';
 	export let data;
 
 	const uid = data.uid;
@@ -15,15 +16,26 @@
 		currentTab = ct;
 	}
 
-	let animeData = {};
+	let animeData;
 	onMount(async () => {
 		const response = await fetch(`/api/anime/${uid}`);
-		animeData = await response.json();
-		console.log(animeData);
+		const respData = await response.json();
+		const mainCollection = respData.MediaListCollection.lists;
+		// mainCollections is like [{[{}, {}]} , {[{}, {}]} , {[{}, {}]} , {[{}, {}]}]
+		animeData = [];
+		mainCollection.forEach((list) => {
+			if (list.entries && list.entries.length) {
+				list.entries.forEach((entry) => {
+					if (entry) {
+						animeData.push(entry);
+					}
+				});
+			}
+		});
 	});
 </script>
 
-<main class="font-op flex flex-col min-h-screen w-full p-3 md:p-9 bg-nord-0">
+<main class="font-op flex flex-col h-screen w-full p-3 md:p-9 bg-nord-0">
 	<navbar
 		class="flex rounded-md shadow-md items-center justify-between text-center text-nord-4 bg-nord-1 p-2 px-4 min-w-full border-2 border-nord-2"
 	>
@@ -50,9 +62,10 @@
 			<div class="flex items-center gap-8 border-b-4 border-nord-3">
 				<div class="flex flex-col gap-2 items-center">
 					{#if udata.User.avatar.medium}
-						<img class="rounded-full" src={udata.User.avatar.medium} />
+						<img alt="user_avatar" class="rounded-full" src={udata.User.avatar.medium} />
 					{:else}
 						<img
+							alt="user_avatar"
 							class="rounded-full"
 							src="https://s4.anilist.co/file/anilistcdn/user/avatar/medium/default.png"
 						/>
@@ -95,10 +108,13 @@
 				>
 			</form>
 			{#if currentTab === 'anime'}
-				{#each animeData.MediaListCollection?.lists[0].entries as anime}
-					{anime?.media.title.romanji}
-					<br />
-				{/each}
+				{#if animeData}
+					{#each animeData as anime}
+						{anime.media.title.romaji}
+						{anime.status}
+						<br />
+					{/each}
+				{/if}
 			{:else}
 				bye
 			{/if}
